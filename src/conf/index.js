@@ -25,5 +25,8 @@ export default function install(Vue,args) {
 
 	addRouter(Vue);
 
-	if(args && args.appData) addTitleApp(Vue,args.appData.title +' '+ args.appData.version);
+	if(args && args.appData) {
+		Vue.prototype.$appData = args.appData;
+		addTitleApp(Vue,args.appData.title +' '+ args.appData.version);
+	}
 }

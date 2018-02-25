@@ -9,6 +9,7 @@
       <li><a href="https://chat.vuejs.org" target="_blank">Community Chat</a></li>
       <li><a href="https://twitter.com/vuejs" target="_blank">Twitter</a></li>
     </ul>
+    <br> <router-view></router-view> <br>
     <h2>Ecosystem</h2>
     <ul>
       <li><a href="http://router.vuejs.org/" target="_blank">vue-router</a></li>
@@ -22,7 +23,7 @@
 <script>
 export default {
   name: 'app',
-  data () {
+  data: function() {
     return {
       msg: 'Welcome to Your Vue.js App'
     }

@@ -4,7 +4,8 @@ import VueRouter from 'vue-router';
 import Vuetify from 'vuetify';
 import 'vuetify/dist/vuetify.min.css';
 
-import routes from './routes';
+import routes from './routes.js';
+import resources from './resources.js';
 
 function addTitleApp(Vue,title) {
 	Vue.mixin({ head:{
@@ -24,7 +25,8 @@ export default function install(Vue,args) {
 	Vue.use(VueHead,{separator:'', complement:''});
 
 	addRouter(Vue);
-
+	Vue.prototype.$appResource = resources(Vue);
+	
 	if(args && args.appData) {
 		Vue.prototype.$appData = args.appData;
 		addTitleApp(Vue,args.appData.title +' '+ args.appData.version);

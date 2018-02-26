@@ -4,8 +4,8 @@
 			<v-card-title class="grey lighten-4 py-4 title">
 				{{superCtrl.dialogTitle}}
 			</v-card-title>
-
-			<router-view name="appDialog" />
+			
+			<slot />
 
 			<v-card-actions>
 				<!-- v-btn flat color="primary">More</v-btn //-->

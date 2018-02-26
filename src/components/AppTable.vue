@@ -33,74 +33,25 @@
 
 <script>
 export default {
+	props:['superCtrl'],
 	data:function() { return {
-		dataTable:{
-			headers:[
-				{text:'Dessert (100g serving)', value:'name', align:'left', sortable:false},
-				{text:'Calories', value:'calories', class:"text-xs-right"},
-				{text:'Fat (g)', value:'fat', class:"text-xs-right"},
-				{text:'Carbs (g)', value:'carbs', class:"text-xs-right"},
-				{text:'Protein (g)', value:'protein', class:"text-xs-right"},
-				{text:'Actions', class:"text-xs-right", sortable:false}
-			],
-			items:[],
-			editedIndex:-1,
-			editedItem:{name:'', calories:0, fat:0, carbs:0, protein:0},
-			defaultItem:{name:'', calories:0, fat:0, carbs:0, protein:0}
-		},
+		dataTable:this.superCtrl.dataTable,
 		pagination:{page:1}
 	} },
 	computed: {
-		formTitle () {
-			return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
-		},
 		headersWithValue:function() {
 			return this.dataTable.headers.filter(function(it){ return it.value; });
 		}
 	},
-	created:function() {
-		// this.initialize()
-	},
 	methods: {
-		initialize:function() {
-			this.dataTable.items = [
-				{name:'Frozen Yogurt', calories:159, fat:6.0, carbs:24, protein:4.0},
-				{name:'Ice cream sandwich', calories:237, fat:9.0, carbs:37, protein:4.3},
-				{name:'Eclair', calories:262, fat:16.0, carbs:23, protein:6.0},
-				{name:'Cupcake', calories:305, fat:3.7, carbs:67, protein:4.3},
-				{name:'Gingerbread', calories:356, fat:16.0, carbs:49, protein:3.9},
-				{name:'Jelly bean', calories:375, fat:0.0, carbs:94, protein:0.0},
-				{name:'Lollipop', calories:392, fat:0.2, carbs:98, protein:0},
-				{name:'Honeycomb', calories:408, fat:3.2, carbs:87, protein:6.5},
-				{name:'Donut', calories:452, fat:25.0, carbs:51, protein:4.9},
-				{name:'KitKat', calories:518, fat:26.0, carbs:65, protein:7}
-			]
-		},
 		editItem:function(item) {
-			this.dataTable.editedIndex = this.items.indexOf(item)
-			this.dataTable.editedItem = Object.assign({}, item)
-			this.dataTable.dialog = true
+			superCtrl.editItem(item.id);
+			this.dialog = true;
 		},
 		deleteItem:function(item) {
-			const index = this.items.indexOf(item)
-			confirm('Are you sure you want to delete this item?') && this.items.splice(index, 1)
+			confirm('Are you sure you want to delete this item?') && superCtrl.editItem(item.id);
 		},
-
-		close:function() {
-			this.dialog = false
-			setTimeout(function() {
-				this.dataTable.editedItem = Object.assign({}, this.defaultItem)
-				this.dataTable.editedIndex = -1
-			}, 300)
-		},
-		save:function() {
-			if(this.dataTable.editedIndex > -1) {
-				Object.assign(this.items[this.dataTable.editedIndex], this.dataTable.editedItem)
-			} else {
-				this.dataTable.items.push(this.dataTable.editedItem)
-			}
-			this.close()
-		}
+		close:function() { this.dialog = false; }
 	}
 }
 </script>

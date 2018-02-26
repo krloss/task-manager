@@ -1,7 +1,7 @@
 <template>
 	<v-app id="inspire">
-		<app-nav :superCtrl="superCtrl" />
-		<app-bar :superCtrl="superCtrl">
+		<app-nav :superCtrl="selfCtrl" />
+		<app-bar :superCtrl="selfCtrl">
 			<h3 slot='barRight'>{{$route.name}}</h3>
 		</app-bar>
 		<v-content> <v-container fluid fill-height> <v-layout justify-center align-center>
@@ -9,23 +9,22 @@
 			<slot />
 		</v-layout> </v-container> </v-content>
 		<slot name="mainBtns">
-			<v-btn fab bottom right color="green" dark fixed @click.stop="superCtrl.dialog = !superCtrl.dialog">
+			<!-- v-btn fab bottom right color="green" dark fixed @click.stop="selfCtrl.dialog = !selfCtrl.dialog">
 				<v-icon>add</v-icon>
-			</v-btn>
+			</v-btn //-->
 		</slot>
-		<app-dialog :superCtrl="superCtrl" />
+		<router-view name="dialogContent" />
 	</v-app>
 </template>
 
 <script>
 import AppNav from './AppNav.vue';
 import AppBar from './AppBar.vue';
-import AppDialog from '../AppDialog.vue';
 
 export default {
-	components:{ AppNav,AppBar,AppDialog },
+	components:{ AppNav,AppBar },
 	data:function() { return {
-		superCtrl:{ drawer:null, dialog:false }
-	} }
+		selfCtrl:{ drawer:null }
+	}; }
 }
 </script>

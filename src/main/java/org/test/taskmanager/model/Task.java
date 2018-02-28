@@ -9,14 +9,22 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+import org.test.taskmanager.AppDatePattern;
+
 @Entity
 public class Task implements Serializable {
-    @Id
+    private static final long serialVersionUID = 1L;
+    
+	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
     private String name;
     private Boolean completed;
+
+    @JsonSerialize(using = AppDatePattern.class)
     private Date createdAt;
     
     @ManyToOne

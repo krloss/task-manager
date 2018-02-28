@@ -9,9 +9,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Plan implements Serializable {
-    @Id
+    private static final long serialVersionUID = 1L;
+
+	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
@@ -19,6 +23,7 @@ public class Plan implements Serializable {
     private Boolean active;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "plan")
+    @JsonIgnore
     private Set<Task> tasks;
 
     public Long getId() {

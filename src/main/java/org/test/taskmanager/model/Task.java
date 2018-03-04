@@ -11,6 +11,7 @@ import javax.persistence.ManyToOne;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
+import org.hibernate.validator.constraints.NotBlank;
 import org.test.taskmanager.AppDatePattern;
 
 @Entity
@@ -21,6 +22,7 @@ public class Task implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
+    @NotBlank
     private String name;
     private Boolean completed;
 

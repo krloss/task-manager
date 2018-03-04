@@ -12,7 +12,7 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 
 public class AppDatePattern extends JsonSerializer<Date> {
     // TODO : Define Date Format in i18n ResourceBundle
-    private static final String DATE_FORMAT = "yyyy-MM-dd";
+    public static final String DATE_FORMAT = "yyyy-MM-dd";
     
     private SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
     

@@ -24,7 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
@@ -43,7 +43,7 @@ public abstract class ResourcesFactory<T> {
 		}
 	}
     
-    protected abstract PagingAndSortingRepository<T,Long> getRepository();
+    protected abstract JpaRepository<T,Long> getRepository();
     
     protected Page<T> findAllByRequest(HttpServletRequest request) {
         return getRepository().findAll(createPageRequest(request));

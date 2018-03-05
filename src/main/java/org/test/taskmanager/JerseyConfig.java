@@ -8,6 +8,7 @@ import org.test.taskmanager.resource.Tasks;
 @Component
 public class JerseyConfig extends ResourceConfig {
     public JerseyConfig() {
+        register(CorsFilter.class);
         register(Plans.class);
         register(Tasks.class);
     }

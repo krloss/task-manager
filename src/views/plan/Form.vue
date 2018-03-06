@@ -9,8 +9,21 @@
 			</v-flex>
 
 			<v-flex xs12 v-if="tasks && tasks.length">
-				<h3>Tasks...</h3>
-				<ul> </ul>
+				<v-layout row> <v-flex xs12 sm8 offset-sm2> <v-card>
+					<v-toolbar color="grey lighten-4 title">
+						<v-toolbar-title>Tasks</v-toolbar-title>
+						<v-spacer></v-spacer>
+						<v-btn icon @click="addTask(entity.id)">
+							<v-icon>add</v-icon>
+						</v-btn>
+					</v-toolbar>
+					<v-list> <template v-for="item in tasks">
+						<v-divider />
+						<v-list-tile @click="editTask(item.id)"> <v-list-tile-content>
+							<v-list-tile-title v-html="item.name" />
+						</v-list-tile-content> </v-list-tile>
+					</template> </v-list>
+				</v-card> </v-flex> </v-layout>
 			</v-flex>
 		</v-layout> </v-container>
 	</app-dialog>
@@ -33,9 +46,14 @@ export default (function() {
 		created:function() {
 			var self = this;
 
+			this.superCtrl.form = this;
+			selfCtrl.superCtrl = this.superCtrl;
 			this.checkDialogByRoute();
 			this.$root.$on('navChange',function(action) {
 				self.checkDialog(action);
+			});
+			this.$on('editItem',function(id) {
+				self.editItem(id);
 			});
 		},
 		computed:{
@@ -52,24 +70,41 @@ export default (function() {
 			insert:function(entity) {
 				this.http.save({},entity).then(function(response) {
 					selfCtrl.entity = { };
+					selfCtrl.superCtrl.table.$emit('refreshTable');
 				});
 			},
 			update:function(entity) {
 				this.http.update({id:entity.id},entity).then(function(response) {
 					selfCtrl.entity = { };
+					selfCtrl.superCtrl.table.$emit('refreshTable');
 				});
 			},
 			save:function() {
 				if(this.entity.id) this.update(this.entity);
 				else this.insert(this.entity);
-
-				this.$emit('refreshTable');
 			},
 
-			getTasks:function(id) {
+			editItem:function(id) {
+				var self = this;
+
+				this.http.get({id:id}).then(function(response) {
+					selfCtrl.entity = response.body;
+					self.fillTasks(id);
+					selfCtrl.dialog.dialog = true;
+				});
+			},
+
+			fillTasks:function(id) {
 				this.http.property({id:id, property:'tasks'}).then(function(response) {
 					selfCtrl.tasks = response.body;
 				});
+			},
+
+			addTask:function(id) {
+				console.log('>>> '+ id);
+			},
+			editTask:function(id) {
+				console.log('--> '+ id);
 			}
 		}
 	}

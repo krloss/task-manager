@@ -1,5 +1,5 @@
 <template>
-	<app-table :superCtrl="selfCtrl" @refreshTable="findAll" @editItem="findOne" @deleteItem="remove" />
+	<app-table :superCtrl="selfCtrl" @refreshTable="findAll" @editItem="editItem" @deleteItem="remove" />
 </template>
 
 <script>
@@ -23,7 +23,13 @@ export default (function() {
 		components:{ AppTable },
 		data:function() { return {selfCtrl:selfCtrl}; },
 		created:function() {
+			var self = this;
+
+			this.superCtrl.table = this;
 			this.findAll();
+			this.$on('refreshTable',function() {
+				self.findAll();
+			});
 		},
 		computed:{
 			http:function() { return this.$appResource('plans'); }
@@ -34,10 +40,8 @@ export default (function() {
 					selfCtrl.dataTable.items = response.body.content;
 				});
 			},
-			findOne:function(id) {
-				this.http.get({id:id}).then(function(response) {
-					console.log('>>> '+ JSON.stringify(response.body));
-				});
+			editItem:function(id) {
+				this.superCtrl.form.$emit('editItem',id);
 			},
 			remove:function(id) {
 				var self = this;

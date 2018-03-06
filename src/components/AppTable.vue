@@ -51,7 +51,7 @@ export default {
 			this.$emit('editItem',item.id);
 		},
 		deleteItem:function(item) {
-			confirm('Are you sure you want to delete this item?') && this.$emit('editItem',item.id);
+			confirm('Are you sure you want to delete this item?') && this.$emit('deleteItem',item.id);
 		}
 	}
 }

@@ -44,6 +44,9 @@ export default {
 		}
 	},
 	methods: {
+		initialize:function() {
+			this.$emit('refreshTable');
+		},
 		editItem:function(item) {
 			this.$emit('editItem',item.id);
 		},

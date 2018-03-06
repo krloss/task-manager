@@ -1,18 +1,16 @@
 <template>
-	<app-dialog :superCtrl="selfCtrl">
+	<app-dialog :superCtrl="dialog" @save="save">
 		<v-container grid-list-sm class="pa-4"> <v-layout row wrap>
 			<v-flex xs10 align-center justify-space-between> <v-layout align-center>
-				<v-text-field prepend-icon="history" placeholder="Name"></v-text-field>
+				<v-text-field prepend-icon="history" v-model="entity.name" placeholder="Name" />
 			</v-layout> </v-flex>
 			<v-flex xs2>
-				<v-checkbox label="Active?" v-model="checkbox"></v-checkbox>
+				<v-checkbox label="Active?" v-model="entity.active" />
 			</v-flex>
 
-			<v-flex xs12 v-if="tasks">
+			<v-flex xs12 v-if="tasks && tasks.length">
 				<h3>Tasks...</h3>
-				<ul>
-					
-				</ul>
+				<ul> </ul>
 			</v-flex>
 		</v-layout> </v-container>
 	</app-dialog>
@@ -21,34 +19,59 @@
 <script>
 import AppDialog from '../../components/AppDialog.vue';
 
-export default {
-	components:{ AppDialog },
-	data:function() { return {
-		checkbox:true,
+export default (function() {
+	var selfCtrl = {
 		tasks:[],
-		selfCtrl:{dialog:false, dialogTitle:'Plan'}
-	} },
-	methods:{
-		tasks:function(id) {
-			http.property({id:id, property:'tasks'}).then(function(response) {
-				console.log('>>> '+ JSON.stringify(response));
+		entity:{ active:false },
+		dialog:{ dialog:false, dialogTitle:'Plan' },
+	};
+	
+	return {
+		props:['superCtrl'],
+		components:{ AppDialog },
+		data:function() { return selfCtrl; },
+		created:function() {
+			var self = this;
+
+			this.checkDialogByRoute();
+			this.$root.$on('navChange',function(action) {
+				self.checkDialog(action);
 			});
 		},
-		insert:function(entity) {
-			http.save({},entity).then(function(response) {
-				console.log('--> '+ JSON.stringify(response));
-			});
+		computed:{
+			http:function() { return this.$appResource('plans'); }
 		},
-		update:function(id,entity) {
-			http.update({id:id},entity).then(function(response) {
-				console.log('>>> '+ JSON.stringify(response));
-			});
-		}
-	},
-	watch:{
-		'$route.query.action':function() {
-			this.selfCtrl['dialog'] = ('add' == this.$route.query.action);
+		methods:{
+			checkDialog:function(action) {
+				this.dialog.dialog = ('search' != action);
+			},
+			checkDialogByRoute:function() {
+				this.checkDialog(this.$route.params.action);
+			},
+
+			insert:function(entity) {
+				this.http.save({},entity).then(function(response) {
+					selfCtrl.entity = { };
+				});
+			},
+			update:function(entity) {
+				this.http.update({id:entity.id},entity).then(function(response) {
+					selfCtrl.entity = { };
+				});
+			},
+			save:function() {
+				if(this.entity.id) this.update(this.entity);
+				else this.insert(this.entity);
+
+				this.$emit('refreshTable');
+			},
+
+			getTasks:function(id) {
+				this.http.property({id:id, property:'tasks'}).then(function(response) {
+					selfCtrl.tasks = response.body;
+				});
+			}
 		}
 	}
-}
+})();
 </script>

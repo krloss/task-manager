@@ -17,10 +17,7 @@ const plan = (function() {
 			template:'<plan-form :superCtrl="selfCtrl" />',
 			data:function() { return {
 				selfCtrl:selfCtrl
-			}; },
-			created:function() {
-				this.selfCtrl.dialog = ('add' == this.$route.query.action);
-			}
+			}; }
 		};
 	};
 })();

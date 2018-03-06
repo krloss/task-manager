@@ -1,19 +1,22 @@
-function createRoute(router,path) {
-    return function(action) { router.push({path:path, query:{action:action}}); };
+function createRoute(navCtrl,name) {
+    return function(action) {
+        navCtrl.$router.push({name:name, params:{action:action}});
+        navCtrl.$root.$emit('navChange',action);
+    };
 }
 
 function createCrudButtons(route) { return [
 	{name:'search', icon:'search', text:'Pesquisar', click:route},
 	{name:'add', icon:'add', text:'Novo', click:route}
 ] };
-function addCRUD(name,text,icon,route) {
-    return {name:name, text:text, icon:icon, 'icon-alt':'keyboard_arrow_down', children:createCrudButtons(route)};
+function addCRUD(name,text,icon,navCtrl) {
+    return {name:name, text:text, icon:icon, 'icon-alt':'keyboard_arrow_down', children:createCrudButtons(navCtrl)};
 }
 
 export default function(self) {
 	return [
-        {name:'home', text:'Home', icon:'phonelink', click:createRoute(self.$router,'/')},
-        addCRUD('plan','Plans','history',createRoute(self.$router,'/plan')),
-        addCRUD('task','Tasks','settings',createRoute(self.$router,'/task'))
+        {name:'home', text:'Home', icon:'phonelink', click:createRoute(self,'Home')},
+        addCRUD('plan','Plans','history',createRoute(self,'Plan')),
+        addCRUD('task','Tasks','settings',createRoute(self,'Task'))
     ];
 }

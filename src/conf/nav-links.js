@@ -1,10 +1,11 @@
+function createRoute(router,path) {
+    return function(action) { router.push({path:path, query:{action:action}}); };
+}
+
 function createCrudButtons(route) { return [
 	{name:'search', icon:'search', text:'Pesquisar', click:route},
 	{name:'add', icon:'add', text:'Novo', click:route}
 ] };
-function createRoute(router,path) {
-    return function(action) { router.push({path:path, query:{action:action}}); };
-}
 function addCRUD(name,text,icon,route) {
     return {name:name, text:text, icon:icon, 'icon-alt':'keyboard_arrow_down', children:createCrudButtons(route)};
 }

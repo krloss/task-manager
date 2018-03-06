@@ -2,7 +2,7 @@
 	<v-app id="inspire">
 		<app-nav :superCtrl="selfCtrl" />
 		<app-bar :superCtrl="selfCtrl">
-			<h3 slot='barRight'>{{$route.name}}</h3>
+			<h3 slot='barRight'>{{ $route.name }}</h3>
 		</app-bar>
 		<v-content> <v-container fluid fill-height> <v-layout justify-center align-center>
 			<router-view name="appContent" />

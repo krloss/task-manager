@@ -6,7 +6,7 @@
 				<!-- Table Body //-->
 				<template slot="items" slot-scope="props">
 					<td v-for="it in headersWithValue" :class="it.class">
-						{{props.item[it.value]}}
+						{{ props.item[it.value] }}
 					</td>
 					<td class="justify-center layout px-0">
 						<v-btn icon class="mx-0" @click="editItem(props.item)">
@@ -45,13 +45,11 @@ export default {
 	},
 	methods: {
 		editItem:function(item) {
-			superCtrl.editItem(item.id);
-			this.dialog = true;
+			this.$emit('editItem',item.id);
 		},
 		deleteItem:function(item) {
-			confirm('Are you sure you want to delete this item?') && superCtrl.editItem(item.id);
-		},
-		close:function() { this.dialog = false; }
+			confirm('Are you sure you want to delete this item?') && this.$emit('editItem',item.id);
+		}
 	}
 }
 </script>

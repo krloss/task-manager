@@ -8,7 +8,7 @@
 				<v-checkbox label="Active?" v-model="entity.active" />
 			</v-flex>
 
-			<v-flex xs12 v-if="tasks && tasks.length">
+			<v-flex xs12 v-if="entity.id">
 				<v-layout row> <v-flex xs12 sm8 offset-sm2> <v-card>
 					<v-toolbar color="grey lighten-4 title">
 						<v-toolbar-title>Tasks</v-toolbar-title>
@@ -37,6 +37,11 @@ export default (function() {
 		tasks:[],
 		entity:{ active:false },
 		dialog:{ dialog:false, dialogTitle:'Plan' },
+
+		clean:function() {
+			selfCtrl.tasks = [ ];
+			selfCtrl.entity = { active:false };
+		}
 	};
 	
 	return {
@@ -51,6 +56,7 @@ export default (function() {
 			this.checkDialogByRoute();
 			this.$root.$on('navChange',function(action) {
 				self.checkDialog(action);
+				selfCtrl.clean();
 			});
 			this.$on('editItem',function(id) {
 				self.editItem(id);
@@ -69,13 +75,13 @@ export default (function() {
 
 			insert:function(entity) {
 				this.http.save({},entity).then(function(response) {
-					selfCtrl.entity = { };
+					selfCtrl.clean();
 					selfCtrl.superCtrl.table.$emit('refreshTable');
 				});
 			},
 			update:function(entity) {
 				this.http.update({id:entity.id},entity).then(function(response) {
-					selfCtrl.entity = { };
+					selfCtrl.clean();
 					selfCtrl.superCtrl.table.$emit('refreshTable');
 				});
 			},

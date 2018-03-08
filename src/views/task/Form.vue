@@ -22,8 +22,8 @@
 			</v-flex>
 
 			<v-flex xs12>
-				<v-select :items="plans" :filter="filterPlans" v-model="entity.plan" item-text="name"
-					item-value="id" label="Plan" autocomplete prepend-icon="history" />
+				<v-select :items="plans" :filter="filterPlans" v-model="planId"
+					item-text="name" item-value="id" label="Plan" autocomplete prepend-icon="history" />
 			</v-flex>
 		</v-layout> </v-container>
 	</app-dialog>
@@ -38,10 +38,12 @@ export default (function() {
 		dialog:{ dialog:false, dialogTitle:'Task' },
 		picker:{ menu:false, modal:false },
 		plans:[],
+		planId:null,
 
 		clean:function() {
 			selfCtrl.entity = { completed:false };
 			selfCtrl.picker = { menu:false, modal:false };
+			selfCtrl.planId = null;
 		},
 		filterPlans:function(item,queryText,itemText) {
 			const hasValue = function(val) { return val != null ? val : ''; };
@@ -96,6 +98,7 @@ export default (function() {
 				});
 			},
 			save:function() {
+				if(this.planId) this.entity.plan = { id:this.planId };
 				if(this.entity.id) this.update(this.entity);
 				else this.insert(this.entity);
 			},
@@ -105,12 +108,15 @@ export default (function() {
 
 				this.http.get({id:id}).then(function(response) {
 					selfCtrl.entity = response.body;
+
+					if(selfCtrl.entity.plan) selfCtrl.planId = selfCtrl.entity.plan.id;
+
 					selfCtrl.dialog.dialog = true;
 				});
 			},
 
 			fillPlans:function() {
-				this.planHttp.get().then(function(response) {
+				this.planHttp.get({sort:'DESC', property:'name'}).then(function(response) {
 					selfCtrl.plans = response.body.content;
 				});
 			}
